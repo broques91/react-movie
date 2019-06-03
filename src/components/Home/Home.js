@@ -24,6 +24,22 @@ class Home extends Component {
         this.fetchItems(endpoint);
     }
 
+    searchItems =(searchTerm) => {
+        let endpoint = '';
+        this.setState({
+            movies: [],
+            loading: true,
+            searchTerm
+        });
+
+        if(searchTerm === '') {
+            endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`;
+        } else {
+            endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=fr-FR&query=${searchTerm}`;
+        }
+        this.fetchItems(endpoint);
+    }
+
     loadMoreItems = () => {
         let endpoint = '';
         this.setState({ loading: true });
