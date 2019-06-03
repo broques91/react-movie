@@ -25,6 +25,7 @@ class Home extends Component {
     }
 
     searchItems =(searchTerm) => {
+        console.log(searchTerm);
         let endpoint = '';
         this.setState({
             movies: [],
@@ -47,7 +48,7 @@ class Home extends Component {
         if(this.setState.searchTerm === '') {
             endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=fr-FR&page=${this.state.currentPage + 1}`;
         }else{
-            endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=fr-FR&query${this.state.searchTerm}&page=${this.state.currentPage + 1}`;
+            endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=fr-FR&query=${this.state.searchTerm}&page=${this.state.currentPage + 1}`;
         }
         this.fetchItems(endpoint);
     }
@@ -76,12 +77,30 @@ class Home extends Component {
                             title = {this.state.heroImage.original_title}
                             text  = {this.state.heroImage.overview}
                         />
-                        <SearchBar />
+                        <SearchBar callback={this.searchItems} />
                     </div> : null 
                 }
-                <FourColGrid />
-                <Spinner />
-                <LoadMoreBtn />
+                <div className="rmdb-home-grid">
+                    <FourColGrid 
+                        header={this.state.searchTerm ? 'Résultats' : 'Films Populaires'}
+                        loading={this.state.loading}
+                    >
+                        {this.state.movies.map ((element, i) => {
+                            return <MovieThumb
+                                        key={i}
+                                        clickable={true}
+                                        image={element.poster_path ? `${IMAGE_BASE_URL}${POSTER_SIZE}/${element.poster_path}`: './images/no_image.jpg'}
+                                        movieId={element.id}
+                                        movieName={element.original_title}
+                                    />
+                        })}
+                    </FourColGrid>
+                    {this.state.loading ? <Spinner/> : null}
+                    {(this.state.currentPage <= this.state.totalPages && !this.state.loadin) ?
+                        <LoadMoreBtn text="Afficher plus" onClick={this.loadMoreItems} />
+                        : null
+                    }
+                </div>
             </div>
         );
     }
