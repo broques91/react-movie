@@ -5,11 +5,11 @@ export const calcTime = (time) => {
   return `${hours}h ${mins}m`;
 }
 
-// Converti un nombre en devise €
+// Converti un nombre en devise
 export const convertMoney = (money) => {
-  var formatter = new Intl.NumberFormat('fr-FR', {
+  var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'EUR',
+    currency: 'USD',
     minimumFractionDigits: 0,
   });
   return formatter.format(money);
